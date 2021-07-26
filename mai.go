@@ -9,6 +9,8 @@ import (
 
 func home(w http.ResponseWriter, r *http.Request) {
     if r.URL.Path != "/" {
+        http.NotFound(w,r)
+        return
 
     }
     w.Write([]byte("шалом"))
@@ -19,8 +21,13 @@ func showSnippet(w http.ResponseWriter, r *http.Request)  {
 }
 
 func createSnippet(w http.ResponseWriter, r *http.Request)  {
-    w.Write([]byte("создание заметок"))
+    if r.Method != http.MethodPost {
+        w.Header().Set("Allow", "http.MethodPost")
+        http.Error(w, "Метод запрещен", 405)
+        return
+    }
 
+    w.Write([]byte("Coздание новой заметки"))
 }
 
 func main()  {
