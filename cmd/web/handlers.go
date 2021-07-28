@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	_ "html/template"
+	"log"
+	_ "log"
 	"net/http"
 	"strconv"
 )
@@ -10,9 +14,18 @@ func home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w,r)
 		return
-
 	}
-	w.Write([]byte("шалом"))
+	ts, err := template.ParseFiles("./ui/html/home.page.tmpl")
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+	err = ts.Execute(w, nil)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
 }
 
 func showSnippet(w http.ResponseWriter, r *http.Request)  {
