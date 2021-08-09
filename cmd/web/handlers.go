@@ -8,12 +8,12 @@ import (
 )
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.NotFound(w)
+		app.notFound(w)
 		return
 	}
 
 	files := []string {
-		"./ui/html/home.page.tmpl",
+		"./ui/html/home.page.bak",
 		"./ui/html/base.layout.tmpl",
 		"./ui/html/footer.partial.tmpl",
 	}
@@ -29,10 +29,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (app *application) ShowSnippet(w http.ResponseWriter, r *http.Request)  {
+func (app *application) showSnippet(w http.ResponseWriter, r *http.Request)  {
 	id, err :=strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1{
-		http.NFound(w)
+		app.notFound(w)
 		return
 
 	}
@@ -42,7 +42,7 @@ func (app *application) ShowSnippet(w http.ResponseWriter, r *http.Request)  {
 func (app *application) createSnippet(w http.ResponseWriter, r *http.Request)  {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", http.MethodPost)
-		http.ClientError(w, http.StatusMethodNotAllowed)
+		app.clientError(w, http.StatusMethodNotAllowed)
 		return
 	}
 
