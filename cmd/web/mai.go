@@ -6,6 +6,8 @@ import (
     "log"
     "net/http"
     "os"
+
+    "github.com/go-sql-driver/mysql"
 )
 
 type application struct {
